@@ -1,0 +1,26 @@
+# Arquivos compilados
+*.class
+
+# Pastas de compilação
+bin/
+target/
+out/
+
+# Eclipse
+.settings/
+.classpath
+.project
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Visual Studio Code
+.vscode/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
