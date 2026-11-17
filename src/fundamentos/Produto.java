@@ -15,13 +15,25 @@ public class Produto {
 			throw new IllegalArgumentException("O preço precisa ser maior que 0.");
 		}
 		if (estoque < 0) {
-			throw new IllegalArgumentException("O estoque precisa ser maior que 0.");
+			throw new IllegalArgumentException("O estoque não pode ser negativo " + estoque);
 		}
 
-		this.nome = nome;
+		this.nome = nome.trim();
 		this.preco = preco;
 		this.estoque = estoque;
 
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public double getPreco() {
+		return preco;
+	}
+
+	public int getEstoque() {
+		return estoque;
 	}
 
 	public void vender(int quantidade) {
@@ -32,8 +44,10 @@ public class Produto {
 		}
 
 		if (quantidade > estoque) {
-			throw new IllegalStateException(
-					"Venda - A Quantidade: " + quantidade + " é menor que o estoque: " + estoque);
+			if (quantidade > estoque) {
+				throw new IllegalStateException(
+						"Estoque insuficiente. Solicitado: " + quantidade + ", disponível: " + estoque);
+			}
 		}
 		estoque -= quantidade;
 
