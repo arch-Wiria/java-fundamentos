@@ -5,6 +5,8 @@ public class Main {
 	public static void main(String[] args) {
 		Produto produto = new Produto("Teclado", 250.00, 10);
 
+		System.out.println("\n=== TESTES ===");
+
 		produto.exibirInformacoes();
 
 		produto.vender(3);
@@ -16,8 +18,6 @@ public class Main {
 		produto.vender(1);
 
 		produto.exibirInformacoes();
-
-		// Testes
 
 		testarVenda(produto, 0);
 
@@ -37,6 +37,67 @@ public class Main {
 
 		produto.exibirInformacoes();
 
+		System.out.println("\n=== CATÁLOGO ===");
+
+		CatalogoProdutos catalogo = new CatalogoProdutos();
+
+		Produto teclado = new Produto("Teclado", 250.00, 10);
+
+		Produto mouse = new Produto("Mouse", 100.00, 20);
+
+		Produto monitor = new Produto("Monitor", 900.00, 5);
+
+		catalogo.adicionar(teclado);
+
+		catalogo.adicionar(mouse);
+
+		catalogo.adicionar(monitor);
+
+		catalogo.listarTodos();
+
+		System.out.println("Quantidade de produtos: " + catalogo.quantidadeDeProdutos());
+
+		Produto encontrado = catalogo.buscarPorNome("MOUSE");
+
+		if (encontrado != null) {
+			System.out.println("Produto Encontrado:");
+			encontrado.exibirInformacoes();
+		} else {
+			System.out.println("Produto não encontrado.");
+		}
+
+		try {
+
+			catalogo.adicionar(new Produto("TECLADO", 300.00, 5));
+
+		} catch (IllegalArgumentException exception) {
+			System.out.println(exception.getMessage());
+		}
+
+		try {
+			catalogo.adicionar(null);
+		} catch (IllegalArgumentException exception) {
+			System.out.println(exception.getMessage());
+		}
+
+		Produto inexistente = catalogo.buscarPorNome("Notebook");
+
+		if (inexistente == null) {
+			System.out.println("Notebook não encontrado.");
+		}
+
+		Produto encontradoComEspacos = catalogo.buscarPorNome("    Mouse   ");
+
+		if (encontradoComEspacos != null) {
+			System.out.println("Busca com espaços funcionou.");
+		}
+
+		try {
+			CatalogoProdutos catalogoVazio = new CatalogoProdutos();
+			catalogoVazio.listarTodos();
+		} catch (IllegalArgumentException exception) {
+			System.out.println(exception.getMessage());
+		}
 	}
 
 	private static void testarReposicao(Produto produto, int quantidade) {
