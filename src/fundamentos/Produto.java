@@ -1,17 +1,22 @@
 package fundamentos;
 
+import java.math.BigDecimal;
+
 public class Produto {
 
-	private String nome;
-	private double preco;
+	private final String nome;
+	private final BigDecimal preco;
 	private int estoque;
 
-	public Produto(String nome, double preco, int estoque) {
+	public Produto(String nome, BigDecimal preco, int estoque) {
 
 		if (nome == null || nome.isBlank()) {
 			throw new IllegalArgumentException("O nome precisa ser um valor existente.");
 		}
-		if (preco <= 0) {
+		if (preco == null) {
+			throw new IllegalArgumentException("O preço não pode ser nulo.");
+		}
+		if (preco.compareTo(BigDecimal.ZERO) <= 0) {
 			throw new IllegalArgumentException("O preço precisa ser maior que 0.");
 		}
 		if (estoque < 0) {
@@ -28,7 +33,7 @@ public class Produto {
 		return nome;
 	}
 
-	public double getPreco() {
+	public BigDecimal getPreco() {
 		return preco;
 	}
 
@@ -40,14 +45,12 @@ public class Produto {
 
 		// Valida Quantidade
 		if (quantidade <= 0) {
-			throw new IllegalArgumentException("Venda - A Quantidade precisa ser maior que 0 | " + quantidade);
+			throw new IllegalArgumentException("A quantidade da venda precisa ser maior que zero: " + quantidade);
 		}
 
 		if (quantidade > estoque) {
-			if (quantidade > estoque) {
-				throw new IllegalStateException(
-						"Estoque insuficiente. Solicitado: " + quantidade + ", disponível: " + estoque);
-			}
+			throw new IllegalStateException(
+					"Estoque insuficiente. Solicitado: " + quantidade + ", disponível: " + estoque);
 		}
 		estoque -= quantidade;
 
@@ -63,18 +66,18 @@ public class Produto {
 
 	}
 
-	public double calcularValorEmEstoque() {
+	public BigDecimal calcularValorEmEstoque() {
 
-		return preco * estoque;
+		return preco.multiply(BigDecimal.valueOf(estoque));
 
 	}
 
 	public void exibirInformacoes() {
 
 		System.out.println("Produto: " + nome);
-		System.out.println("Preço: R$" + preco);
+		System.out.println("Preço: R$" + preco.toPlainString());
 		System.out.println("Estoque: " + estoque);
-		System.out.println("Valor total em estoque: R$" + calcularValorEmEstoque());
+		System.out.println("Valor total em estoque: R$" + calcularValorEmEstoque().toPlainString());
 	}
 
 }
