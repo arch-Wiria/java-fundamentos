@@ -1,9 +1,11 @@
 package fundamentos;
 
+import java.math.BigDecimal;
+
 public class Main {
 
 	public static void main(String[] args) {
-		Produto produto = new Produto("Teclado", 250.00, 10);
+		Produto produto = new Produto("Teclado", new BigDecimal("250.00"), 10);
 
 		System.out.println("\n=== TESTES ===");
 
@@ -29,11 +31,13 @@ public class Main {
 
 		testarReposicao(produto, -5);
 
-		testarCadastro("", 100, 10);
+		testarCadastro("", new BigDecimal(100), 10);
 
-		testarCadastro("Mouse", -100, 10);
+		testarCadastro("Mouse", new BigDecimal(-100), 10);
 
-		testarCadastro("Mouse", 100, -10);
+		testarCadastro("Mouse", new BigDecimal(100), -10);
+
+		testarCadastro("Mouse", null, 10);
 
 		produto.exibirInformacoes();
 
@@ -41,11 +45,11 @@ public class Main {
 
 		CatalogoProdutos catalogo = new CatalogoProdutos();
 
-		Produto teclado = new Produto("Teclado", 250.00, 10);
+		Produto teclado = new Produto("Teclado", new BigDecimal("250.00"), 10);
 
-		Produto mouse = new Produto("Mouse", 100.00, 20);
+		Produto mouse = new Produto("Mouse", new BigDecimal("100.00"), 20);
 
-		Produto monitor = new Produto("Monitor", 900.00, 5);
+		Produto monitor = new Produto("Monitor", new BigDecimal("900.00"), 5);
 
 		catalogo.adicionar(teclado);
 
@@ -68,7 +72,7 @@ public class Main {
 
 		try {
 
-			catalogo.adicionar(new Produto("TECLADO", 300.00, 5));
+			catalogo.adicionar(new Produto("TECLADO", new BigDecimal("300.00"), 5));
 
 		} catch (IllegalArgumentException exception) {
 			System.out.println(exception.getMessage());
@@ -92,12 +96,17 @@ public class Main {
 			System.out.println("Busca com espaços funcionou.");
 		}
 
-		try {
-			CatalogoProdutos catalogoVazio = new CatalogoProdutos();
-			catalogoVazio.listarTodos();
-		} catch (IllegalArgumentException exception) {
-			System.out.println(exception.getMessage());
-		}
+		CatalogoProdutos catalogoVazio = new CatalogoProdutos();
+		catalogoVazio.listarTodos();
+
+		Produto cabo = new Produto("Cabo", new BigDecimal("0.10"), 3);
+
+		System.out.println("Valor do estoque de cabos: R$ " + cabo.calcularValorEmEstoque().toPlainString());
+
+		catalogo.adicionar(cabo);
+
+		System.out.println("Valor total do catálogo: R$ " + catalogo.calcularValorTotalCatalogo().toPlainString());
+
 	}
 
 	private static void testarReposicao(Produto produto, int quantidade) {
@@ -118,7 +127,7 @@ public class Main {
 		}
 	}
 
-	private static void testarCadastro(String nome, double preco, int estoque) {
+	private static void testarCadastro(String nome, BigDecimal preco, int estoque) {
 		try {
 			Produto produto = new Produto(nome, preco, estoque);
 			System.out.println("Produto Criado com sucesso!");

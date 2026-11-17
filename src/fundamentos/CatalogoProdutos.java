@@ -1,5 +1,6 @@
 package fundamentos;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,8 +35,10 @@ public class CatalogoProdutos {
 			throw new IllegalArgumentException("O nome do Produto não pode ser Nulo ou vazio.");
 		}
 
+		String nomeTratado = nome.trim();
+
 		for (Produto produtoCadastrado : produtos) {
-			if (produtoCadastrado.getNome().equalsIgnoreCase(nome)) {
+			if (produtoCadastrado.getNome().equalsIgnoreCase(nomeTratado)) {
 				return produtoCadastrado;
 			}
 		}
@@ -45,7 +48,7 @@ public class CatalogoProdutos {
 	public void listarTodos() {
 
 		if (produtos.isEmpty()) {
-			throw new IllegalArgumentException("O catálogo está vazio.");
+			System.out.println("O catálogo está vazio.");
 		}
 		for (Produto produtoCadastrado : produtos) {
 			produtoCadastrado.exibirInformacoes();
@@ -56,6 +59,16 @@ public class CatalogoProdutos {
 
 		return produtos.size();
 
+	}
+
+	public BigDecimal calcularValorTotalCatalogo() {
+		BigDecimal total = BigDecimal.ZERO;
+
+		for (Produto produtoCadastrado : produtos) {
+			total = total.add(produtoCadastrado.calcularValorEmEstoque());
+		}
+
+		return total;
 	}
 
 }
