@@ -163,59 +163,6 @@ public class Main {
 			System.out.println(exception.getMessage());
 		}
 
-		System.out.println("\n=== CICLO DO PEDIDO ===");
-
-		Produto headset = new Produto("Headset", new BigDecimal("200.00"), 10);
-
-		Pedido pedidoCancelado = new Pedido();
-
-		System.out.println("Status Inicial: " + pedidoCancelado.getStatus());
-
-		pedidoCancelado.adicionarItem(headset, 3);
-
-		System.out.println("Estoque após adicionar: " + headset.getEstoque());
-
-		pedidoCancelado.cancelar();
-
-		System.out.println("Status Após cancelar: " + pedidoCancelado.getStatus());
-
-		System.out.println("Estoque Após cancelar: " + headset.getEstoque());
-
-		try {
-			pedidoCancelado.adicionarItem(headset, 1);
-		} catch (IllegalStateException exception) {
-			System.out.println(exception.getMessage());
-		}
-
-		try {
-			pedidoCancelado.cancelar();
-		} catch (IllegalStateException exception) {
-			System.out.println(exception.getMessage());
-		}
-
-		System.out.println("Estoque Após segunda tentativa de cancelamento: " + headset.getEstoque());
-
-		Pedido pedidoFinalizado = new Pedido();
-
-		pedidoFinalizado.adicionarItem(headset, 2);
-
-		pedidoFinalizado.finalizar();
-
-		System.out.println("Status: " + pedidoFinalizado.getStatus());
-
-		try {
-			pedidoFinalizado.adicionarItem(headset, 1);
-		} catch (IllegalStateException exception) {
-			System.out.println(exception.getMessage());
-		}
-
-		try {
-			Pedido pedidoVazio = new Pedido();
-			pedidoVazio.finalizar();
-		} catch (IllegalStateException exception) {
-			System.out.println(exception.getMessage());
-		}
-
 	}
 
 	private static void testarReposicao(Produto produto, int quantidade) {
