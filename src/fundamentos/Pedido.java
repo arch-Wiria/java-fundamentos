@@ -8,49 +8,11 @@ public class Pedido {
 
 	private final List<ItemPedido> itens;
 
-	private StatusPedido status;
-
 	public Pedido() {
 		this.itens = new ArrayList<>();
-		this.status = StatusPedido.ABERTO;
-	}
-
-	public StatusPedido getStatus() {
-		return status;
-	}
-
-	private void validarPedidoAberto() {
-		if (status != StatusPedido.ABERTO) {
-			throw new IllegalStateException("O pedido não pode ser alterado porque está: " + status);
-		}
-	}
-
-	public void finalizar() {
-		validarPedidoAberto();
-
-		if (itens.isEmpty()) {
-			throw new IllegalStateException("Não é possível finalizar um pedido vazio.");
-		}
-
-		status = StatusPedido.FINALIZADO;
-
-	}
-
-	public void cancelar() {
-
-		validarPedidoAberto();
-
-		for (ItemPedido item : itens) {
-			item.getProduto().reporEstoque(item.getQuantidade());
-		}
-
-		status = StatusPedido.CANCELADO;
-
 	}
 
 	public void adicionarItem(Produto produto, int quantidade) {
-
-		validarPedidoAberto();
 
 		ItemPedido item = new ItemPedido(produto, quantidade);
 
