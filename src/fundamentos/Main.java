@@ -107,6 +107,62 @@ public class Main {
 
 		System.out.println("Valor total do catálogo: R$ " + catalogo.calcularValorTotalCatalogo().toPlainString());
 
+		System.out.println("\n=== PEDIDO ===");
+
+		Produto tecladoPedido = new Produto("Teclado Gamer", new BigDecimal("250.00"), 10);
+
+		Produto mousePedido = new Produto("Mouse Gamer", new BigDecimal("100.00"), 20);
+
+		Pedido pedido = new Pedido();
+
+		pedido.adicionarItem(tecladoPedido, 2);
+
+		pedido.adicionarItem(mousePedido, 3);
+
+		pedido.listarItens();
+
+		System.out.println("Quantidade de itens: " + pedido.quantidadeDeItens());
+
+		System.out.println("Quantidade de unidades: " + pedido.quantidadeTotalDeUnidades());
+
+		System.out.println("Total do Pedido: R$ " + pedido.calcularTotal().toPlainString());
+
+		System.out.println("\n=== ESTADO FINAL DO PEDIDO ===");
+
+		pedido.listarItens();
+
+		System.out.println("Quantidade de itens: " + pedido.quantidadeDeItens());
+
+		System.out.println("Quantidade de unidades: " + pedido.quantidadeTotalDeUnidades());
+
+		System.out.println("Total: R$ " + pedido.calcularTotal().toPlainString());
+
+		System.out.println("\n=== ESTOQUES FINAIS ===");
+
+		tecladoPedido.exibirInformacoes();
+		mousePedido.exibirInformacoes();
+
+		try {
+			pedido.adicionarItem(null, 1);
+		} catch (IllegalArgumentException exception) {
+			System.out.println(exception.getMessage());
+		}
+		try {
+			pedido.adicionarItem(tecladoPedido, 0);
+		} catch (IllegalArgumentException exception) {
+			System.out.println(exception.getMessage());
+		}
+		try {
+			pedido.adicionarItem(tecladoPedido, -1);
+		} catch (IllegalArgumentException exception) {
+			System.out.println(exception.getMessage());
+		}
+		try {
+			pedido.adicionarItem(tecladoPedido, 100);
+		} catch (IllegalStateException exception) {
+			System.out.println(exception.getMessage());
+		}
+
 	}
 
 	private static void testarReposicao(Produto produto, int quantidade) {
