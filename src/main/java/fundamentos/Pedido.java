@@ -53,7 +53,6 @@ public class Pedido {
 	}
 
 	public void adicionarItem(Produto produto, int quantidade) {
-
 		validarPedidoAberto();
 
 		if (produto == null) {
@@ -68,7 +67,6 @@ public class Pedido {
 
 		ItemPedido item = new ItemPedido(produto, quantidade);
 		itens.add(item);
-
 	}
 
 	public BigDecimal calcularTotal() {
@@ -106,6 +104,24 @@ public class Pedido {
 			item.exibirInformacoes();
 			System.out.println("--------------------");
 		}
+	}
+
+	public void removerItem(Produto produto) {
+
+		validarPedidoAberto();
+
+		if (produto == null) {
+			throw new IllegalArgumentException("O produto não pode ser nulo.");
+		}
+
+		ItemPedido itemParaRemover = itens.stream().filter(item -> item.getProduto().equals(produto)).findFirst()
+				.orElseThrow(
+						() -> new IllegalArgumentException("O produto " + produto.getNome() + " não está no pedido."));
+
+		produto.reporEstoque(itemParaRemover.getQuantidade());
+
+		itens.remove(itemParaRemover);
+
 	}
 
 }

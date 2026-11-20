@@ -117,5 +117,4 @@ class ProdutoTest {
 
 		assertEquals(10, produto.getEstoque());
 	}
-
 }
