@@ -1,14 +1,20 @@
 package fundamentos;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public class Produto {
 
+	private final UUID id;
 	private final String nome;
 	private final BigDecimal preco;
 	private int estoque;
 
 	public Produto(String nome, BigDecimal preco, int estoque) {
+		this(UUID.randomUUID(), nome, preco, estoque);
+	}
+
+	public Produto(UUID id, String nome, BigDecimal preco, int estoque) {
 
 		if (nome == null || nome.isBlank()) {
 			throw new IllegalArgumentException("O nome precisa ser um valor existente.");
@@ -22,7 +28,11 @@ public class Produto {
 		if (estoque < 0) {
 			throw new IllegalArgumentException("O estoque não pode ser negativo " + estoque);
 		}
+		if (id == null) {
+			throw new IllegalArgumentException("O ID não pode ser nulo.");
+		}
 
+		this.id = id;
 		this.nome = nome.trim();
 		this.preco = preco;
 		this.estoque = estoque;
@@ -39,6 +49,10 @@ public class Produto {
 
 	public int getEstoque() {
 		return estoque;
+	}
+
+	public UUID getId() {
+		return id;
 	}
 
 	public void vender(int quantidade) {
@@ -79,4 +93,21 @@ public class Produto {
 		System.out.println("Valor total em estoque: R$" + calcularValorEmEstoque().toPlainString());
 	}
 
+	@Override
+	public boolean equals(Object objeto) {
+
+		if (this == objeto) {
+			return true;
+		}
+
+		if (!(objeto instanceof Produto outroProduto)) {
+			return false;
+		}
+		return id.equals(outroProduto.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
 }
