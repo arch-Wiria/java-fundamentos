@@ -49,8 +49,7 @@ public class Produto {
 		}
 
 		if (quantidade > estoque) {
-			throw new IllegalStateException(
-					"Estoque insuficiente. Solicitado: " + quantidade + ", disponível: " + estoque);
+			throw new EstoqueInsuficienteException(quantidade, estoque);
 		}
 		estoque -= quantidade;
 
