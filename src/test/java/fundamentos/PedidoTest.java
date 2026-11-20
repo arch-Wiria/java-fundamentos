@@ -85,4 +85,19 @@ class PedidoTest {
 		assertEquals(10, produto.getEstoque());
 	}
 
+	@Test
+	void naoDeveAdicionarItemQuandoEstoqueForInsuficiente() {
+		EstoqueInsuficienteException exception = assertThrows(EstoqueInsuficienteException.class,
+				() -> pedido.adicionarItem(produto, 11));
+
+		assertEquals("Estoque insuficiente. Solicitado: 11, disponível: 10", exception.getMessage());
+
+		assertEquals(0, pedido.quantidadeDeItens());
+		assertEquals(0, pedido.quantidadeTotalDeUnidades());
+		assertEquals(BigDecimal.ZERO, pedido.calcularTotal());
+		assertEquals(10, produto.getEstoque());
+		assertEquals(StatusPedido.ABERTO, pedido.getStatus());
+
+	}
+
 }

@@ -42,7 +42,10 @@ class ProdutoTest {
 	void naoDeveAlterarEstoqueQuandoVendaForMaiorQueDisponivel() {
 		Produto produto = new Produto("Monitor", new BigDecimal("900.00"), 5);
 
-		assertThrows(IllegalStateException.class, () -> produto.vender(6));
+		EstoqueInsuficienteException exception = assertThrows(EstoqueInsuficienteException.class,
+				() -> produto.vender(6));
+
+		assertEquals("Estoque insuficiente. Solicitado: 6, disponível: 5", exception.getMessage());
 
 		assertEquals(5, produto.getEstoque());
 
