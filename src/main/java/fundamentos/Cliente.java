@@ -6,7 +6,7 @@ public class Cliente {
 
 	private final UUID id;
 	private final String nome;
-	private final String email;
+	private final Email email;
 
 	public Cliente(String nome, String email) {
 		if (nome == null || nome.isBlank()) {
@@ -19,7 +19,7 @@ public class Cliente {
 
 		this.id = UUID.randomUUID();
 		this.nome = nome.trim();
-		this.email = email.trim();
+		this.email = new Email(email);
 
 	}
 
@@ -31,7 +31,7 @@ public class Cliente {
 		return nome;
 	}
 
-	public String getEmail() {
+	public Email getEmail() {
 		return email;
 	}
 

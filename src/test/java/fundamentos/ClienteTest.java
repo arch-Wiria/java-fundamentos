@@ -14,7 +14,7 @@ public class ClienteTest {
 
 		assertNotNull(cliente.getId());
 		assertEquals("Ana Silva", cliente.getNome());
-		assertEquals("ana@gmail.com", cliente.getEmail());
+		assertEquals("ana@gmail.com", cliente.getEmail().valor());
 
 	}
 
