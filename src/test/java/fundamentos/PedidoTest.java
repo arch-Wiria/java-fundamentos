@@ -15,12 +15,13 @@ class PedidoTest {
 
 	private Produto produto;
 	private Pedido pedido;
+	private Cliente cliente;
 
 	@BeforeEach
 	void prepara() {
 		produto = new Produto("Headset", new BigDecimal("200.00"), 10);
-
-		pedido = new Pedido();
+		cliente = new Cliente("Willian", "willian@gmail.com");
+		pedido = new Pedido(cliente);
 
 	}
 
@@ -186,4 +187,17 @@ class PedidoTest {
 
 	}
 
+	@Test
+	void deveAssociarClienteAoPedido() {
+		assertEquals(cliente, pedido.getCliente());
+	}
+
+	@Test
+	void naoDeveCriarPedidoSemCliente() {
+
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Pedido(null));
+
+		assertEquals("O cliente do pedido não pode ser nulo.", exception.getMessage());
+
+	}
 }

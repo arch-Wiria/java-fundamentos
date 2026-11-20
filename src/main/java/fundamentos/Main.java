@@ -25,7 +25,9 @@ public class Main {
 			produto.exibirInformacoes();
 		});
 
-		Pedido pedido = new Pedido();
+		Cliente cliente = new Cliente("Willian", "willian@gmail.com");
+
+		Pedido pedido = new Pedido(cliente);
 
 		pedido.adicionarItem(teclado, 2);
 		pedido.adicionarItem(mouse, 3);
