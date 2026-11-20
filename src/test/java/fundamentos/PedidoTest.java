@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class PedidoTest {
 
@@ -115,6 +117,72 @@ class PedidoTest {
 		assertEquals(1, pedido.quantidadeDeItens());
 		assertEquals(2, pedido.quantidadeTotalDeUnidades());
 		assertEquals(8, produto.getEstoque());
+
+	}
+
+	@ParameterizedTest
+	@ValueSource(ints = { 0, -1, -10 })
+	void naoDeveAdicionarItemComQuantidadeInvalida(int quantidade) {
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() -> pedido.adicionarItem(produto, quantidade));
+
+		assertEquals("A quantidade do item deve ser maior que zero: " + quantidade, exception.getMessage());
+
+		assertEquals(0, pedido.quantidadeDeItens());
+		assertEquals(0, pedido.quantidadeTotalDeUnidades());
+		assertEquals(BigDecimal.ZERO, pedido.calcularTotal());
+		assertEquals(10, produto.getEstoque());
+		assertEquals(StatusPedido.ABERTO, pedido.getStatus());
+	}
+
+	@Test
+	void deveRemoverItemEReporEstoque() {
+		pedido.adicionarItem(produto, 3);
+
+		pedido.removerItem(produto);
+
+		assertEquals(0, pedido.quantidadeDeItens());
+		assertEquals(0, pedido.quantidadeTotalDeUnidades());
+		assertEquals(BigDecimal.ZERO, pedido.calcularTotal());
+		assertEquals(10, produto.getEstoque());
+		assertEquals(StatusPedido.ABERTO, pedido.getStatus());
+
+	}
+
+	@Test
+	void naoDeveRemoverProdutoQueNaoEstaNoPedido() {
+		Produto outroProduto = new Produto("Mouse", new BigDecimal("100.00"), 5);
+
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() -> pedido.removerItem(outroProduto));
+
+		assertEquals("O produto Mouse não está no pedido.", exception.getMessage());
+
+		assertEquals(0, pedido.quantidadeDeItens());
+		assertEquals(5, outroProduto.getEstoque());
+		assertEquals(StatusPedido.ABERTO, pedido.getStatus());
+	}
+
+	@Test
+	void naoDeveRemoverItemDepoisDeFinalizarPedido() {
+		pedido.adicionarItem(produto, 2);
+		pedido.finalizar();
+
+		assertThrows(IllegalStateException.class, () -> pedido.removerItem(produto));
+
+		assertEquals(1, pedido.quantidadeDeItens());
+		assertEquals(2, pedido.quantidadeTotalDeUnidades());
+		assertEquals(new BigDecimal("400.00"), pedido.calcularTotal());
+		assertEquals(8, produto.getEstoque());
+		assertEquals(StatusPedido.FINALIZADO, pedido.getStatus());
+	}
+
+	@Test
+	void naoDeveRemoverProdutoNulo() {
+		assertThrows(IllegalArgumentException.class, () -> pedido.removerItem(null));
+
+		assertEquals(0, pedido.quantidadeDeItens());
+		assertEquals(10, produto.getEstoque());
 
 	}
 

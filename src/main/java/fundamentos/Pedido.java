@@ -53,15 +53,20 @@ public class Pedido {
 	}
 
 	public void adicionarItem(Produto produto, int quantidade) {
-
 		validarPedidoAberto();
 
-		ItemPedido item = new ItemPedido(produto, quantidade);
+		if (produto == null) {
+			throw new IllegalArgumentException("O produto não pode ser nulo.");
+		}
+
+		if (quantidade <= 0) {
+			throw new IllegalArgumentException("A quantidade do item deve ser maior que zero: " + quantidade);
+		}
 
 		produto.vender(quantidade);
 
+		ItemPedido item = new ItemPedido(produto, quantidade);
 		itens.add(item);
-
 	}
 
 	public BigDecimal calcularTotal() {
@@ -99,6 +104,24 @@ public class Pedido {
 			item.exibirInformacoes();
 			System.out.println("--------------------");
 		}
+	}
+
+	public void removerItem(Produto produto) {
+
+		validarPedidoAberto();
+
+		if (produto == null) {
+			throw new IllegalArgumentException("O produto não pode ser nulo.");
+		}
+
+		ItemPedido itemParaRemover = itens.stream().filter(item -> item.getProduto().equals(produto)).findFirst()
+				.orElseThrow(
+						() -> new IllegalArgumentException("O produto " + produto.getNome() + " não está no pedido."));
+
+		produto.reporEstoque(itemParaRemover.getQuantidade());
+
+		itens.remove(itemParaRemover);
+
 	}
 
 }
