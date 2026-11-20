@@ -19,14 +19,13 @@ public class CatalogoProdutos {
 			throw new IllegalArgumentException("O produto não pode ser nulo");
 		}
 
-		for (Produto produtoCadastrado : produtos) {
+		boolean produtoJaExiste = produtos.stream()
+				.anyMatch(produtoCadastrado -> produtoCadastrado.getNome().equalsIgnoreCase(produto.getNome()));
 
-			if (produtoCadastrado.getNome().equalsIgnoreCase(produto.getNome())) {
-				throw new IllegalArgumentException(
-						"Já existe o nome " + produto.getNome() + " cadastrado como produto.");
-			}
-
+		if (produtoJaExiste) {
+			throw new IllegalArgumentException("Já existe o nome " + produto.getNome() + " cadastrado como Produto.");
 		}
+
 		produtos.add(produto);
 	}
 
@@ -38,12 +37,9 @@ public class CatalogoProdutos {
 
 		String nomeTratado = nome.trim();
 
-		for (Produto produtoCadastrado : produtos) {
-			if (produtoCadastrado.getNome().equalsIgnoreCase(nomeTratado)) {
-				return Optional.of(produtoCadastrado);
-			}
-		}
-		return Optional.empty();
+		return produtos.stream().filter(produtoCadastrado -> 
+		produtoCadastrado.getNome().equalsIgnoreCase(nomeTratado)).findFirst();
+
 	}
 
 	public void listarTodos() {
@@ -51,9 +47,7 @@ public class CatalogoProdutos {
 		if (produtos.isEmpty()) {
 			System.out.println("O catálogo está vazio.");
 		}
-		for (Produto produtoCadastrado : produtos) {
-			produtoCadastrado.exibirInformacoes();
-		}
+		produtos.forEach(Produto::exibirInformacoes);
 	}
 
 	public int quantidadeDeProdutos() {
@@ -65,11 +59,9 @@ public class CatalogoProdutos {
 	public BigDecimal calcularValorTotalCatalogo() {
 		BigDecimal total = BigDecimal.ZERO;
 
-		for (Produto produtoCadastrado : produtos) {
-			total = total.add(produtoCadastrado.calcularValorEmEstoque());
-		}
-
-		return total;
+		return produtos.stream()
+				.map(Produto::calcularValorEmEstoque)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 
 }
