@@ -1,6 +1,7 @@
 package fundamentos;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 public class Main {
 
@@ -61,14 +62,12 @@ public class Main {
 
 		System.out.println("Quantidade de produtos: " + catalogo.quantidadeDeProdutos());
 
-		Produto encontrado = catalogo.buscarPorNome("MOUSE");
+		Optional<Produto> encontrado = catalogo.buscarPorNome("MOUSE");
 
-		if (encontrado != null) {
+		encontrado.ifPresentOrElse(produtoEncontrado -> {
 			System.out.println("Produto Encontrado:");
-			encontrado.exibirInformacoes();
-		} else {
-			System.out.println("Produto não encontrado.");
-		}
+			produtoEncontrado.exibirInformacoes();
+		}, () -> System.out.println("Produto não encontrado."));
 
 		try {
 
@@ -84,15 +83,15 @@ public class Main {
 			System.out.println(exception.getMessage());
 		}
 
-		Produto inexistente = catalogo.buscarPorNome("Notebook");
+		Optional<Produto> inexistente = catalogo.buscarPorNome("Notebook");
 
-		if (inexistente == null) {
+		if (inexistente.isEmpty()) {
 			System.out.println("Notebook não encontrado.");
 		}
 
-		Produto encontradoComEspacos = catalogo.buscarPorNome("    Mouse   ");
+		Optional<Produto> encontradoComEspacos = catalogo.buscarPorNome("    Mouse   ");
 
-		if (encontradoComEspacos != null) {
+		if (encontradoComEspacos.isPresent()) {
 			System.out.println("Busca com espaços funcionou.");
 		}
 

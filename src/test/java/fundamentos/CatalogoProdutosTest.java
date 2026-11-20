@@ -4,8 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,22 +57,31 @@ class CatalogoProdutosTest {
 	}
 
 	@Test
-	void deveBuscarProdutoIgnorandoMaiusculaEESpaco() {
+	void deveBuscarProdutoPorNomeIgnorandoMaiusculasEMinusculas() {
 		catalogo.adicionar(mouse);
+		
+		Optional<Produto> encontrado = catalogo.buscarPorNome("MOUSE");
 
-		Produto encontrado = catalogo.buscarPorNome("   MOUSE   ");
-
-		assertSame(mouse, encontrado);
+		assertTrue(encontrado.isPresent());
+		assertSame(mouse, encontrado.orElseThrow());
 
 	}
 
 	@Test
-	void deveRetornarNuloQuandoProdutoNaoExistir() {
-		catalogo.adicionar(teclado);
+	void deveRetornarOptionalVazioQuandoProdutoNaoExistir() {
+		Optional<Produto> encontrado = catalogo.buscarPorNome("NoteBook");
 
-		Produto encontrado = catalogo.buscarPorNome("NoteBook");
+		assertTrue(encontrado.isEmpty());
 
-		assertNull(encontrado);
+	}
+
+	@Test
+	void deveBuscarProdutoRemovendoEspacosDoNome() {
+		catalogo.adicionar(mouse);
+		Optional<Produto> encontrado = catalogo.buscarPorNome("   Mouse   ");
+
+		assertTrue(encontrado.isPresent());
+		assertSame(mouse, encontrado.orElseThrow());
 
 	}
 
