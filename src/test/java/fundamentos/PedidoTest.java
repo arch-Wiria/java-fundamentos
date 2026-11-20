@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -97,6 +98,23 @@ class PedidoTest {
 		assertEquals(BigDecimal.ZERO, pedido.calcularTotal());
 		assertEquals(10, produto.getEstoque());
 		assertEquals(StatusPedido.ABERTO, pedido.getStatus());
+
+	}
+
+	@Test
+	void deveRetornarCopiaImutavelDosItens() {
+
+		pedido.adicionarItem(produto, 2);
+
+		List<ItemPedido> itensDoPedido = pedido.getItens();
+
+		assertEquals(1, itensDoPedido.size());
+
+		assertThrows(UnsupportedOperationException.class, () -> itensDoPedido.clear());
+
+		assertEquals(1, pedido.quantidadeDeItens());
+		assertEquals(2, pedido.quantidadeTotalDeUnidades());
+		assertEquals(8, produto.getEstoque());
 
 	}
 

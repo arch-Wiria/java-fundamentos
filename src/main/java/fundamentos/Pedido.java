@@ -10,6 +10,10 @@ public class Pedido {
 
 	private StatusPedido status;
 
+	public List<ItemPedido> getItens() {
+		return List.copyOf(itens);
+	}
+
 	public Pedido() {
 		this.itens = new ArrayList<>();
 		this.status = StatusPedido.ABERTO;
