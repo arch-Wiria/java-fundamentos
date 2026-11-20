@@ -3,6 +3,7 @@ package fundamentos;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class CatalogoProdutos {
 
@@ -29,7 +30,7 @@ public class CatalogoProdutos {
 		produtos.add(produto);
 	}
 
-	public Produto buscarPorNome(String nome) {
+	public Optional<Produto> buscarPorNome(String nome) {
 
 		if (nome == null || nome.isBlank()) {
 			throw new IllegalArgumentException("O nome do Produto não pode ser Nulo ou vazio.");
@@ -39,10 +40,10 @@ public class CatalogoProdutos {
 
 		for (Produto produtoCadastrado : produtos) {
 			if (produtoCadastrado.getNome().equalsIgnoreCase(nomeTratado)) {
-				return produtoCadastrado;
+				return Optional.of(produtoCadastrado);
 			}
 		}
-		return null;
+		return Optional.empty();
 	}
 
 	public void listarTodos() {
