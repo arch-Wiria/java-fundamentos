@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class PedidoTest {
 
@@ -115,6 +117,23 @@ class PedidoTest {
 		assertEquals(1, pedido.quantidadeDeItens());
 		assertEquals(2, pedido.quantidadeTotalDeUnidades());
 		assertEquals(8, produto.getEstoque());
+
+	}
+
+	@ParameterizedTest
+	@ValueSource(ints = { 0, -1, -10 })
+	void naoDeveAdicionarItemComQuantidadeInvalida(int quantidade) {
+
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() -> pedido.adicionarItem(produto, quantidade));
+
+		assertEquals("A quantidade do item deve ser maior que zero: " + quantidade, exception.getMessage());
+
+		assertEquals(0, pedido.quantidadeDeItens());
+		assertEquals(0, pedido.quantidadeTotalDeUnidades());
+		assertEquals(BigDecimal.ZERO, pedido.calcularTotal());
+		assertEquals(10, produto.getEstoque());
+		assertEquals(StatusPedido.ABERTO, pedido.getStatus());
 
 	}
 

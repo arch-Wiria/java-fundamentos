@@ -56,10 +56,17 @@ public class Pedido {
 
 		validarPedidoAberto();
 
-		ItemPedido item = new ItemPedido(produto, quantidade);
+		if (produto == null) {
+			throw new IllegalArgumentException("O produto não pode ser nulo.");
+		}
+
+		if (quantidade <= 0) {
+			throw new IllegalArgumentException("A quantidade do item deve ser maior que zero: " + quantidade);
+		}
 
 		produto.vender(quantidade);
 
+		ItemPedido item = new ItemPedido(produto, quantidade);
 		itens.add(item);
 
 	}
