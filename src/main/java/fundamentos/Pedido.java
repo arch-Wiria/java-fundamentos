@@ -9,18 +9,28 @@ public class Pedido {
 	private final List<ItemPedido> itens;
 
 	private StatusPedido status;
+	private Cliente cliente;
 
 	public List<ItemPedido> getItens() {
 		return List.copyOf(itens);
 	}
 
-	public Pedido() {
+	public Pedido(Cliente cliente) {
+		if (cliente == null) {
+			throw new IllegalArgumentException("O cliente do pedido não pode ser nulo.");
+		}
+
+		this.cliente = cliente;
 		this.itens = new ArrayList<>();
 		this.status = StatusPedido.ABERTO;
 	}
 
 	public StatusPedido getStatus() {
 		return status;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
 	}
 
 	private void validarPedidoAberto() {
