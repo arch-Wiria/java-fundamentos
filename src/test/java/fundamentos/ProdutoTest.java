@@ -1,9 +1,12 @@
 package fundamentos;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -117,4 +120,54 @@ class ProdutoTest {
 
 		assertEquals(10, produto.getEstoque());
 	}
+
+	@Test
+	void deveGerarIdentificadorAoCriarProduto() {
+		Produto produto = new Produto("Mouse", new BigDecimal("100.00"), 5);
+
+		assertNotNull(produto.getId());
+
+	}
+
+	@Test
+	void produtosComIdsDiferentesNaoDevemSerIguais() {
+
+		Produto primeiro = new Produto("Mouse", new BigDecimal("100.00"), 5);
+
+		Produto segundo = new Produto("Mouse", new BigDecimal("100.00"), 5);
+
+		assertNotEquals(primeiro.getId(), segundo.getId());
+		assertNotEquals(primeiro, segundo);
+
+	}
+
+	@Test
+	void produtoComMesmoIdentificadorDevemSerIguais() {
+		UUID id = UUID.randomUUID();
+
+		Produto primeiro = new Produto(id, "Mouse", new BigDecimal("100.00"), 5);
+
+		Produto segundo = new Produto(id, "Mouse Atualizado", new BigDecimal("150.00"), 8);
+
+		assertEquals(primeiro, segundo);
+		assertEquals(primeiro.hashCode(), segundo.hashCode());
+
+	}
+
+	@Test
+	void produtoNaoDeveSerIgualANuloOuOutroTipo() {
+		Produto produto = new Produto("Mouse", new BigDecimal("100.00"), 5);
+
+		assertEquals(produto, produto);
+		assertNotEquals(produto, null);
+		assertNotEquals(produto, "Mouse");
+
+	}
+
+	@Test
+	void naoDeveCriarProdutoComIdentificadorNulo() {
+		assertThrows(IllegalArgumentException.class, () ->
+		new Produto(null, "Mouse", new BigDecimal("100.00"), 5));
+	}
+
 }
